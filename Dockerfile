@@ -63,12 +63,12 @@ VOLUME /data
 COPY docker-initialize.py docker-entrypoint.sh /
 
 # Expose instance port
-EXPOSE 8080
+#EXPOSE 8080
 
 
 # Add instance healthcheck
-HEALTHCHECK --interval=1m --timeout=5s --start-period=1m \
-  CMD nc -z -w5 127.0.0.1 8080 || exit 1
+#HEALTHCHECK --interval=1m --timeout=5s --start-period=1m \
+#  CMD nc -z -w5 127.0.0.1 8080 || exit 1
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["start"]
