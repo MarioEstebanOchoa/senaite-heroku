@@ -21,7 +21,7 @@ ENV PLONE_MAJOR=4.3 \
 RUN useradd --system -m -d $SENAITE_HOME -U -u 500 $SENAITE_USER
 
 # Create direcotries
-RUN mkdir -p $SENAITE_INSTANCE_HOME $SENAITE_FILESTORAGE $SENAITE_BLOBSTORAGE
+ RUN mkdir -p $SENAITE_INSTANCE_HOME $SENAITE_FILESTORAGE $SENAITE_BLOBSTORAGE
 
 # Copy the package config
 COPY packages.txt /
@@ -50,8 +50,11 @@ RUN python bootstrap.py
 RUN bin/buildout 
 RUN ln -s $SENAITE_FILESTORAGE/ var/filestorage \
     && ln -s $SENAITE_BLOBSTORAGE/ var/blobstorage 
-RUN  chown -R senaite:senaite $SENAITE_HOME $SENAITE_DATA \
-    && rm -rf $SENAITE_HOME/buildout-cache/downloads/dist
+RUN chown -R senaite:senaite $SENAITE_HOME $SENAITE_DATA 
+RUN rm -rf $SENAITE_HOME/buildout-cache/downloads/dist
+
+
+USER senaite
 
 # Mount external volume
 VOLUME /data
@@ -61,6 +64,7 @@ COPY docker-initialize.py docker-entrypoint.sh /
 
 # Expose instance port
 EXPOSE 8080
+
 
 # Add instance healthcheck
 HEALTHCHECK --interval=1m --timeout=5s --start-period=1m \

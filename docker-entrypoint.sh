@@ -5,12 +5,15 @@ COMMANDS="debug help logtail show stop adduser fg kill quit run wait console for
 START="start restart zeoserver"
 CMD="bin/instance"
 
-gosu senaite python /docker-initialize.py
+#gosu senaite 
+python /docker-initialize.py
 
 if [ -e "custom.cfg" ]; then
   if [ ! -e "bin/develop" ]; then
-    gosu senaite /home/senaite/senaitelims/bin/buildout -c custom.cfg
-    gosu senaite python /docker-initialize.py
+    #gosu senaite 
+    /home/senaite/senaitelims/bin/buildout -c custom.cfg
+    #gosu senaite 
+    python /docker-initialize.py
   fi
 fi
 
@@ -28,13 +31,16 @@ fi
 
 if [[ $START == *"$1"* ]]; then
   _stop() {
-    gosu senaite $CMD stop
+    #gosu senaite 
+    $CMD stop
     kill -TERM $child 2>/dev/null
   }
 
   trap _stop SIGTERM SIGINT
-  gosu senaite $CMD start
-  gosu senaite $CMD logtail &
+  #gosu senaite 
+  $CMD start
+  #gosu senaite 
+  $CMD logtail &
   child=$!
 
   pid=`$CMD status | sed 's/[^0-9]*//g'`
@@ -50,7 +56,8 @@ if [[ $START == *"$1"* ]]; then
   fi
 else
   if [[ $COMMANDS == *"$1"* ]]; then
-    exec gosu senaite bin/instance "$@"
+    #exec gosu senaite 
+    exec bin/instance "$@"
   fi
   exec "$@"
 fi
